@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,18 +28,3 @@ Route::post('logout', [LoginController::class, 'logout'])->name('logout');
 
 Route::get('register', [RegisterController::class, 'showRegistrationForm'])->name('register');
 Route::post('register', [RegisterController::class, 'register']);
-
-// Endpoint untuk mendapatkan CSRF cookie
-Route::get('sanctum/csrf-cookie', function() {
-    return response()->json(['status' => 'success']);
-});
-
-Route::middleware('auth')->get('/home', function (Request $request) {
-    $user = Auth::user();
-    $token = $user->createToken('authToken')->plainTextToken;
-    User::where('id',$user->id)->update([
-                'token' => $token
-            ]);
-
-    return redirect('http://127.0.0.1:8001');
-})->name('home');

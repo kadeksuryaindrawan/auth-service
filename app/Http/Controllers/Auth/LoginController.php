@@ -26,7 +26,7 @@ class LoginController extends Controller
         $this->validateLogin($request);
 
         // Check credentials
-        if (Auth::attempt($request->only('email', 'password'))) {
+        if (Auth::attempt($request->only('username', 'password'))) {
             // Successful login, create token and redirect
             $user = Auth::user();
             $token = $user->createToken('authToken')->plainTextToken;
@@ -53,7 +53,7 @@ class LoginController extends Controller
     protected function validateLogin(Request $request)
     {
         $request->validate([
-            'email' => 'required|email',
+            'username' => 'required|string',
             'password' => 'required|string',
         ]);
     }
@@ -61,7 +61,7 @@ class LoginController extends Controller
     protected function sendFailedLoginResponse(Request $request)
     {
         throw ValidationException::withMessages([
-            'email' => [trans('auth.failed')],
+            'username' => [trans('auth.failed')],
         ]);
     }
 
